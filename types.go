@@ -39,5 +39,6 @@ type AudioBook struct {
 
 type EMagazine struct {
 	LibraryItem
-	IssueNumbers int
+	IssueNumber int
+	IsArchive bool
 }
