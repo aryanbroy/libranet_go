@@ -1,6 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+
+func NewAudioBook(id int64, title string, author string, duration time.Duration) *AudioBook{
+	libItem := LibraryItem{
+		ID: id,
+		Title: title,
+		Author: author,
+		IsAvailable: true,
+	}
+	
+	return &AudioBook{
+		LibraryItem: libItem,
+		isPlaying: false,
+		Duration: duration,
+	}
+}
 
 func (audioBook *AudioBook) Play() error{
 	var isBorrowed bool
@@ -45,4 +63,3 @@ func (audioBook *AudioBook) Pause() error{
 	fmt.Println("Paused audiobook")
 	return nil
 }
-
