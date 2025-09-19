@@ -17,6 +17,6 @@ func NewEMagazine(id int64, title string, author string, issueNumber int) *EMaga
 	}
 }
 
-func (audioBook *AudioBook) ArchiveIssue(issueNumber int) {
+func (emagazine *EMagazine) ArchiveIssue(issueNumber int) {
 	fmt.Printf("Archieved issue with issue number: %v\n", issueNumber)
 }
