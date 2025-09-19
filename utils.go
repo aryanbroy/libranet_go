@@ -8,13 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewBorrowingRecord(itemId int64, userId int64, borrowDate time.Time, dueDate time.Time) *BorrowingRecord{
+func NewBorrowingRecord(item *LibraryItem, user *User, borrowDate time.Time, dueDate time.Time) *BorrowingRecord{
 	id := uuid.New().String()
 
 	br := &BorrowingRecord{
 		ID: id,
-		ItermId: itemId,
-		UserId: userId,
+		Item: item,
+		User: user,
 		BorrowDate: borrowDate,
 		DueDate: dueDate,
 		ReturnDate: nil,
@@ -26,12 +26,11 @@ func NewBorrowingRecord(itemId int64, userId int64, borrowDate time.Time, dueDat
 
 func CalculateDueDate(borrowDate time.Time, duration time.Duration) time.Time {
 	dueDate := borrowDate.Add(duration)
-	fmt.Println("DueDate: ",dueDate)
 	return dueDate
 }
 
 func CalculateFine(dueDate, returnDate time.Time) float64 {
-	var fine float64 
+	var fine float64
 
 	if returnDate.Before(dueDate) {
 		fmt.Println("Returned on or before due date")
