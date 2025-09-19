@@ -23,7 +23,7 @@ func (l *LibraryItem) Return(userId int64) error {
 		return err
 	}
 
-	duration := 4 * 24 * time.Hour
+	duration := 5 * 24 * time.Hour
 	returnDate := time.Now().Add(duration)
 
 	activeRecord.ReturnDate = &returnDate
