@@ -11,8 +11,6 @@ func NewBook(id int64, title string, author string, pages int) *Book{
 		Title: title,
 		Author: author,
 		IsAvailable: true,
-		BorrowDate: nil,
-		ReturnDate: nil,
 	}
 	
 	return &Book{
@@ -21,20 +19,45 @@ func NewBook(id int64, title string, author string, pages int) *Book{
 	}
 }
 
-func (b *Book) Borrow(userId int64, duration time.Duration) error {
-	isAvailable := b.ValidateBorrowing()
-	if !isAvailable {
-		err := fmt.Errorf("Book Not available for borrowing")
+func (b *Book) Return(userId int64) error {
+	var activeRecord *BorrowingRecord
+
+	for _, record := range b.borrowRecord {
+		if record.ReturnDate == nil && record.UserId == userId {
+			activeRecord = record
+			break
+		}
+	}
+
+	if activeRecord == nil {
+		err := fmt.Errorf("No borrowing record found")
 		return err
 	}
-	b.IsAvailable = false
-	borrowDate := time.Now()
-	dueDate := CalculateDueDate(borrowDate, duration)
-	NewBorrowingRecord(b.ID, userId, borrowDate, dueDate)
-	
+
+	duration := 4 * 24 * time.Hour
+	returnDate := time.Now().Add(duration)
+
+	activeRecord.ReturnDate = &returnDate
+	activeRecord.Fine = CalculateFine(activeRecord.DueDate, returnDate)	
+	b.IsAvailable = true
+
 	return nil
 }
 
-func (b *Book) Return(userId int64) error {
-	return nil
+func (b *Book) Borrow(userId int64, duration time.Duration) (*BorrowingRecord, error) {
+	isAvailable := b.ValidateBorrowing()
+	if !isAvailable {
+		err := fmt.Errorf("Book Not available for borrowing")
+		return nil, err
+	}
+
+	b.IsAvailable = false
+
+	borrowDate := time.Now()
+	dueDate := CalculateDueDate(borrowDate, duration)
+	br := NewBorrowingRecord(b.ID, userId, borrowDate, dueDate)
+	b.borrowRecord = append(b.borrowRecord, br)	
+
+	return br, nil
 }
+

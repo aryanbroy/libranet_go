@@ -9,6 +9,7 @@ type User struct {
 }
 
 type BorrowingRecord struct {
+	ID string
 	ItermId int64
 	UserId int64
 	BorrowDate time.Time
@@ -22,8 +23,7 @@ type LibraryItem struct {
 	Title string
 	Author string
 	IsAvailable bool
-	BorrowDate *time.Time
-	ReturnDate *time.Time
+	borrowRecord []*BorrowingRecord
 }
 
 type Book struct {
