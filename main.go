@@ -13,7 +13,7 @@ func main() {
 	book := NewBook(1, "Something", "Broy", 10)
 
 	duration := 3 * 24 * time.Hour
-	br, err := book.Borrow(user.ID, duration)
+	br, err := book.Borrow(user, duration)
 	if err != nil {
 		log.Panic(err)
 	} else {

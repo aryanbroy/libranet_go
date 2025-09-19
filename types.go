@@ -10,8 +10,8 @@ type User struct {
 
 type BorrowingRecord struct {
 	ID string
-	ItermId int64
-	UserId int64
+	Item *LibraryItem
+	User *User 
 	BorrowDate time.Time
 	DueDate time.Time
 	ReturnDate *time.Time
@@ -33,6 +33,7 @@ type Book struct {
 
 type AudioBook struct {
 	LibraryItem
+	isPlaying bool
 	Duration time.Duration
 }
 
